@@ -1,6 +1,6 @@
-package com.example.syncpass.data.remote
+package com.example.syncpass.data.remote.dto
 
-import com.example.syncpass.domain.model.TipoUsuario
+import com.example.syncpass.domain.model.RolUsuario
 
 data class LoginRequest (
     val nombreUsuario: String,
@@ -9,5 +9,5 @@ data class LoginRequest (
 
 data class LoginResponse (
     val mostrarNombre: String,
-    val tipoUsuario: TipoUsuario
+    val rolUsuario: RolUsuario
 )

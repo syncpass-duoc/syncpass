@@ -15,7 +15,9 @@ private val EsquemaClaro = lightColorScheme(
     background = GrisClaro,
     onBackground = AzulGrafito,
     surface = Color.White,
-    onSurface = AzulGrafito
+    onSurface = AzulGrafito,
+    onSurfaceVariant = GrisTexto,
+    outline = GrisBorde
 )
 
 private val EsquemaOscuro = darkColorScheme(
@@ -26,7 +28,9 @@ private val EsquemaOscuro = darkColorScheme(
     background = AzulGrafito,
     onBackground = GrisClaro,
     surface = AzulGrafito,
-    onSurface = GrisClaro
+    onSurface = GrisClaro,
+    onSurfaceVariant = GrisBorde,
+    outline = GrisTexto
 )
 
 @Composable

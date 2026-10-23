@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.syncpass.ui.navigation.Routes
 import com.example.syncpass.ui.screens.home.Home
+import com.example.syncpass.ui.screens.home.HomeScreen
 import com.example.syncpass.ui.screens.login.LoginScreen
 import com.example.syncpass.ui.theme.SyncpassTheme
 
@@ -34,7 +35,7 @@ class MainActivity : ComponentActivity() {
                                 })
                             }
                             composable(Routes.HOME) {
-                                Home()
+                                HomeScreen()
                             }
                         }
                     }

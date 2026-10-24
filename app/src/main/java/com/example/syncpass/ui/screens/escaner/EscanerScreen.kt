@@ -86,7 +86,6 @@ fun EscanerScreen(
 @Preview(showBackground = true)
 @Composable
 fun EscanerScreenPreview() {
-    SyncpassTheme {
-        EscanerScreen(onVolver = {}, onQrLeido = {})
+    SyncpassTheme { EscanerScreen(onVolver = {}, onQrLeido = {})
     }
 }

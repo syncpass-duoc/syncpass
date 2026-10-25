@@ -70,16 +70,8 @@ fun EscanerScreen(
             )
         }
 
-        Text("Apunta al codigo del asistente", color = GrisClaro)
+        Text("Apunta al codigo QR del asistente", color = GrisClaro)
 
-        Spacer(Modifier.weight(1f))
-
-        OutlinedButton(
-            onClick = onVolver,
-            border = BorderStroke(2.dp, Color.White),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White),
-            modifier = Modifier.fillMaxWidth().height(56.dp)
-        ) { Text("Volver") }
     }
 }
 

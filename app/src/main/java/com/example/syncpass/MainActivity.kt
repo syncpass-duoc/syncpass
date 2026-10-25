@@ -84,7 +84,6 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Routes.ESCANER) {
                                 EscanerScreen(
-                                    onVolver = { navController.popBackStack() },
                                     onQrLeido = { codigo ->
                                         Toast.makeText(
                                             this@MainActivity,

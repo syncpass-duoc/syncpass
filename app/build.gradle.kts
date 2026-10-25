@@ -56,12 +56,8 @@ dependencies {
     // sincronizacion en segundo plano
     implementation("androidx.work:work-runtime:2.12.0")
 
-    // Librerias de la camara y lo del QR
-    implementation("androidx.camera:camera-core:1.6.1")
-    implementation("androidx.camera:camera-camera2:1.6.1")
-    implementation("androidx.camera:camera-lifecycle:1.6.1")
-    implementation("androidx.camera:camera-view:1.6.1")
-    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+    // Cámara y lectura de códigos QR
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
 
     implementation(platform(libs.androidx.compose.bom))
@@ -72,6 +68,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

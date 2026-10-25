@@ -1,83 +1,102 @@
 package com.example.syncpass.ui.screens.escaner
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.Alignment
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.material3.Text
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.syncpass.ui.theme.SyncpassTheme
-
-
-private val Grafito = Color(0xFF1E293B)
-private val Verde = Color(0xFF22C55E)
-private val GrisClaro = Color(0xFFE2E8F0)
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.syncpass.ui.components.QrScannerView
 
 @Composable
 fun EscanerScreen(
-    onVolver: () -> Unit,
     onQrLeido: (String) -> Unit
 ) {
+    val context = LocalContext.current
+
+    var permisoConcedido by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+
+    val pedirPermiso = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { concedido ->
+        permisoConcedido = concedido
+    }
+
+    LaunchedEffect(Unit) {
+        if (!permisoConcedido) {
+            pedirPermiso.launch(Manifest.permission.CAMERA)
+        }
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Grafito)
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = "Escanear QR",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.Start)
-        )
+        Text("Escanear QR")
 
-        Spacer(Modifier.height(40.dp))
-
-        Box(
-            modifier = Modifier
-                .size(260.dp)
-                .border(4.dp, Verde, RoundedCornerShape(24.dp))
-                .clickable { onQrLeido("ASISTENTE-001") },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Camara simulada\nToca para escanear",
-                color = GrisClaro,
-                textAlign = TextAlign.Center
+        if (permisoConcedido) {
+            QrScannerView(
+                modifier = Modifier.fillMaxWidth().weight(1f),
+                onQrLeido = onQrLeido
             )
+        } else {
+            Column(
+                modifier = Modifier.fillMaxWidth().weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+
+                Icon(
+                    imageVector = Icons.Default.CameraAlt,
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+
+                Spacer(Modifier.height(16.dp))
+
+                Text("Se necesita permiso para usar la camara")
+
+                Spacer(Modifier.height(16.dp))
+
+                Button(
+                    onClick = { pedirPermiso.launch(Manifest.permission.CAMERA) }
+                ) {
+                    Text("Permitir camara")
+                }
+            }
         }
-
-        Text("Apunta al codigo QR del asistente", color = GrisClaro)
-
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EscanerScreenPreview() {
-    SyncpassTheme { EscanerScreen(onVolver = {}, onQrLeido = {})
     }
 }

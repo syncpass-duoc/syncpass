@@ -22,17 +22,21 @@ import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import com.example.syncpass.data.local.SyncPassBdd
 import com.example.syncpass.data.local.insertarDatos
+import com.example.syncpass.data.local.entity.UsuarioEntity
 import com.example.syncpass.ui.components.BarraInferior
 import com.example.syncpass.ui.navigation.Routes
 import com.example.syncpass.ui.screens.escaner.EscanerScreen
 import com.example.syncpass.ui.screens.home.HomeScreen
 import com.example.syncpass.ui.screens.login.LoginScreen
+import com.example.syncpass.ui.screens.registro.RegistroScreen
 import com.example.syncpass.ui.theme.SyncpassTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {
-        Room.databaseBuilder(applicationContext, SyncPassBdd::class.java, "syncpass.db").build()
+        Room.databaseBuilder(applicationContext, SyncPassBdd::class.java, "syncpass.db")
+            .addMigrations(SyncPassBdd.MIGRATION_1_2)
+            .build()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,11 +77,39 @@ class MainActivity : ComponentActivity() {
                     Box(Modifier.padding(innerPadding)) {
                         NavHost(navController = navController, startDestination = Routes.LOGIN) {
                             composable(Routes.LOGIN) {
-                                LoginScreen(onLoginSuccess = {
-                                    navController.navigate(Routes.HOME) {
-                                        popUpTo(Routes.LOGIN) { inclusive = true }
-                                    }
-                                })
+                                LoginScreen(
+                                    onAutenticar = { nombre, contrasena, tipo ->
+                                        db.usuarioDao().buscarPorNombre(nombre).any { usuario ->
+                                            usuario.contrasena == contrasena &&
+                                                usuario.tipoUsuario == tipo
+                                        }
+                                    },
+                                    onLoginSuccess = {
+                                        navController.navigate(Routes.HOME) {
+                                            popUpTo(Routes.LOGIN) { inclusive = true }
+                                        }
+                                    },
+                                    onRegistroClick = { navController.navigate(Routes.REGISTRO) }
+                                )
+                            }
+                            composable(Routes.REGISTRO) {
+                                RegistroScreen(
+                                    onRegistrar = { nombre, contrasena, tipo ->
+                                        db.usuarioDao().insertar(
+                                            UsuarioEntity(
+                                                nombreUsuario = nombre,
+                                                contrasena = contrasena,
+                                                tipoUsuario = tipo
+                                            )
+                                        )
+                                    },
+                                    onRegistroSuccess = {
+                                        navController.navigate(Routes.HOME) {
+                                            popUpTo(Routes.LOGIN) { inclusive = true }
+                                        }
+                                    },
+                                    onVolverClick = { navController.popBackStack() }
+                                )
                             }
                             composable(Routes.HOME) {
                                 HomeScreen(eventos = eventos)

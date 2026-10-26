@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "eventos")
 data class EventoEntity(
-    @PrimaryKey val id: Long,
+    @PrimaryKey val id: Int,
     val titulo: String,
     val lugar: String,
     val fechaHoraMillis: Long,

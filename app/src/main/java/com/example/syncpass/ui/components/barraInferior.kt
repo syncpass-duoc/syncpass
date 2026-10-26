@@ -39,7 +39,7 @@ private val opciones = listOf(
 @Composable
 fun BarraInferior(
     rutaActual: String?,
-    enNavegar: (String) -> Unit
+    onNavegar: (String) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().navigationBarsPadding()
@@ -57,7 +57,7 @@ fun BarraInferior(
                     .selectable(
                         selected = opcSeleccionada,
                         role = Role.Tab,
-                        onClick = { enNavegar(opcion.ruta) }
+                        onClick = { onNavegar(opcion.ruta) }
                     ),
                 contentAlignment = Alignment.Center
             ) {

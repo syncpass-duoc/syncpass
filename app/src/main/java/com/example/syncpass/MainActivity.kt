@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             BarraInferior(
                                 rutaActual = rutaActual,
-                                enNavegar = { ruta ->
+                                onNavegar = { ruta ->
                                     if (ruta != rutaActual) {
                                         navController.navigate(ruta) {
                                             popUpTo(Routes.HOME) { saveState = true }
